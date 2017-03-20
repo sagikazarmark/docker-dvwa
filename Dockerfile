@@ -34,6 +34,7 @@ RUN set -xe \
 # Configure application
 RUN set -xe \
 	&& chmod -R 777 /var/www/html/hackable/uploads/ /var/www/html/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt \
+	&& chmod 777 /var/www/html/ \
 	&& sed -i 's/allow_url_include = Off/allow_url_include = On/g' /etc/php5/apache2/php.ini \
     && sed -i "s/^.*recaptcha_public_key.* = '';/\$_DVWA[ 'recaptcha_public_key' ] = getenv('RECAPTCHA_PUBLIC_KEY');/g" /var/www/html/config/config.inc.php \
 	&& sed -i "s/^.*recaptcha_private_key' ].* = '';/\$_DVWA[ 'recaptcha_private_key' ] = getenv('RECAPTCHA_PRIVATE_KEY');/g" /var/www/html/config/config.inc.php
