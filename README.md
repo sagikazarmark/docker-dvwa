@@ -12,7 +12,7 @@ Since it includes SERIOUS ones, it's highly unrecommended to put it anywhere clo
 To even more lower the risks when running it on your own computer, it is recommended to isolate it.
 A Docker image or a VM should be fine, but no warranties.
 
-Read the original [DVWA disclaimer](https://github.com/ethicalhack3r/DVWA#disclaimer) too.
+Read the original [DVWA disclaimer](https://github.com/ethicalhack3r/DVWA#disclaimer) as well!
 
 
 ## Usage
@@ -71,7 +71,7 @@ Further changes:
 ### Start as daemon
 
 This is **NOT** recommended as you might forget to stop the container (as I did),
-but it can be useful if you don't want the container to consume your shell window.
+but it can be useful if you don't want the container to consume your shell.
 You can start the container as a daemon by replacing `--rm` with `-d`:
 
 ``` bash
@@ -102,13 +102,13 @@ where `3336` is the port which you can connect to on your `localhost`:
 $ docker run --rm -it -p 8080:80 -p 3336:3306 sagikazarmark/dvwa
 ```
 
-After that you can easily connect to the server:
+After that you can easily connect to the MySQL server:
 
 ``` bash
 $ mysql -h 127.0.0.1 -P 3336 -u root -pp@ssw0rd
 ```
 
-This can be useful for example if you want to monitor the server with `mytop`:
+Or you can easily monitor the server with `mytop`:
 
 ``` bash
 $ mytop --password="p@ssw0rd" --port=3346 --database="dvwa" --host="127.0.0.1"
@@ -117,29 +117,28 @@ $ mytop --password="p@ssw0rd" --port=3346 --database="dvwa" --host="127.0.0.1"
 
 ### Recaptcha
 
-Since recaptcha requires registration, unfortunately I couldn't build it into the image.
-If you need captcha, head to `https://www.google.com/recaptcha/admin/create` and register a key.
+Since recaptcha requires registration, I couldn't build it into the image.
+If you need it, head to `https://www.google.com/recaptcha/admin/create` and register a key.
 
-After that start the container with the following command:
+After that start the container with the following parameters:
 
 ``` bash
-$ docker run -d -p 8080:80 -e RECAPTCHA_PUBLIC_KEY=YOUR_KEY -e RECAPTCHA_PRIVATE_KEY=YOUR_KEY sagikazarmark/dvwa
+$ docker run -d --name dvwa -p 8080:80 -e RECAPTCHA_PUBLIC_KEY=YOUR_KEY -e RECAPTCHA_PRIVATE_KEY=YOUR_KEY sagikazarmark/dvwa
 ```
 
 
 ### Check logs with lnav
 
-[lnav](http://lnav.org) is an extremely powerful log analyzer which can easily become the developer's best friend.
+[lnav](http://lnav.org) is an extremely powerful log analyzer and can easily become the developer's best friend.
 It allows you to filter/search/highlight or save logs in the console. It knows all kinds of log formats including
 Apache log and it can even highlight SQL queries, which makes it a perfect tool for us.
 
-There are two kinds of logs which might be useful in our scenario:
+There are two kinds of logs which might be useful in the current scenario:
 
 - Apache access and error logs
 - MySQL error and general query logs
 
-Fortunately the container automatically tails the Apache logs to the STDOUT of the container, so we can use
-the built-in Docker logging:
+Fortunately the container automatically tails the Apache logs to the STDOUT, so we can use the built-in Docker logging:
 
 ``` bash
 $ docker logs -f dvwa | lnav
@@ -150,15 +149,15 @@ Type the following (or at least the colon, you can copy-paste the rest):
 
 `:filter-in GET /vulnerabilities`
 
-It can also be useful to search for and highlight a certain part of the log (for example the posted form content in case of SQLi).
-For that you can either use the highlight command, or if you want to go quickly, the search function.
+It can also be useful to search for and highlight certain parts of the log (for example the posted form in case of SQLi).
+For that you can either use the highlight command or the search function (let's use this one).
 As in the previous case, you need to type the slash, but you can copy-paste the rest:
 
 `/(?<=id=)(.*)(?=&Submit=Submit HTTP)`
 
 This will highlight the contents of the `id` field sent as a query parameter.
 
-Sticking to the SQLi example, observing the injected code itself can be useful, but sometimes it's more expressive to
+Sticking to the SQLi example, observing the injected code itself can be useful, but sometimes it's better to
 examine the executed SQL query itself. Unfortunately the MySQL query log is not tailed into the container's STDOUT,
 but all is not lost, we can still use lnav and a bit of hack:
 
@@ -166,7 +165,7 @@ but all is not lost, we can still use lnav and a bit of hack:
 $ docker exec dvwa sh -c "tail -f /var/log/mysql/mysql.log" | lnav
 ```
 
-The general log contains all kinds of queries, we are mostly interested in `SELECT` ones, so let's filter them:
+The general log contains all kinds of queries, let's take a look at the `SELECT` ones, filter them:
 
 `:filter-in SELECT`
 
@@ -184,10 +183,12 @@ very same DVWA, so it's a valid question to ask why I created another one.
 
 Besides being a NIH fighter, I am also allergic to low quality. This includes everything from code to documentation.
 Although there are not too much code in this case that could be wrong, the existing images are highly underdocumented.
-My purpose was to provide an image AND a guide with advanced tips, so that it can actually be useful.
+My purpose was to provide an image AND a guide with tips, so that it can actually be useful.
 
 In most of the cases the piece of software fulfills the needs of it's publisher,
-but it may not be useful for other people. So as a thumb rule a published solution should either aim a very specific,
+but it may not be useful for other people. People usually fail to see this and that's why the internet is flooded
+with tons of software doing essentially the same, but a bit differently, tailored to specific use cases.
+So as a thumb rule a published solution should either aim a very specific,
 but common problem or it should aim to be useful for a larger audience with all kinds of use cases.
 
 And a third point (which is very specific to Docker images): I am not a big fan of running images which
@@ -196,7 +197,7 @@ does not publish a Dockerfile as well.
 
 ### Environment
 
-Most of the images either does not provide any information about their environment or use "special"
+Most of the images either do not provide any information about their environment or use "special"
 dockerized LAMP stacks (mostly `tutum/lamp`).
 
 One of my goals was creating an image as close to "usual" production environments as possible.
