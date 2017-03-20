@@ -185,14 +185,7 @@ Besides being a NIH fighter, I am also allergic to low quality. This includes ev
 Although there are not too much code in this case that could be wrong, the existing images are highly underdocumented.
 My purpose was to provide an image AND a guide with tips, so that it can actually be useful.
 
-In most of the cases the piece of software fulfills the needs of it's publisher,
-but it may not be useful for other people. People usually fail to see this and that's why the internet is flooded
-with tons of software doing essentially the same, but a bit differently, tailored to specific use cases.
-So as a thumb rule a published solution should either aim a very specific,
-but common problem or it should aim to be useful for a larger audience with all kinds of use cases.
-
-And a third point (which is very specific to Docker images): I am not a big fan of running images which
-does not publish a Dockerfile as well.
+Last, but not least: I am not a big fan of running images which does not publish a Dockerfile as well.
 
 
 ### Environment
