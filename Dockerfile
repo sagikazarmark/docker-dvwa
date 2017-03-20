@@ -26,6 +26,7 @@ RUN set -xe \
     && echo "[client]\nuser=root\npassword=p@ssw0rd" > /root/.my.cnf \
     && sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && sed -i "s/^#general_log*/general_log/" /etc/mysql/my.cnf \
+    && sed -i "/skip-external-locking/a secure-file-priv=" /etc/mysql/my.cnf \
     && service mysql start \
     && mysql -e "CREATE DATABASE dvwa" \
     && mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'p@ssw0rd'"

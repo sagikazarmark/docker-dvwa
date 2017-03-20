@@ -62,6 +62,7 @@ Further changes:
 - `allow_url_include` PHP option is turned `On` (required by DVWA)
 - MySQL `bind_address` option is disabled as well as `root` user is allowed to login from any addresses so that you can access the database from your host computer
 - MySQL `general_log` is turned on (default location: `/var/log/mysql/mysql.log`) so that queries can be monitored
+- MySQL `secure-file-priv` is turned off to allow SQLi OS Shell hacks
 - recaptcha is configured in the DVWA configuration to look for `RECAPTCHA_PUBLIC_KEY` and `RECAPTCHA_PRIVATE_KEY` environment variables
 
 
