@@ -72,7 +72,7 @@ Further changes:
 
 ### Start as daemon
 
-This is **NOT** recommended as you might forget to stop the container (as I did),
+This is **NOT** recommended as you might forget to stop the container (like I do all the times),
 but it can be useful if you don't want the container to consume your shell.
 You can start the container as a daemon by replacing `--rm` with `-d`:
 
